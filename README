@@ -1,0 +1,33 @@
+Name: logviewer.py
+Author: Victor Trac (victor.trac@gmail.com)
+
+Overview
+------------
+logviewer.py is an extension of Python's included SimpleHTTPServer.py that adds
+several additional features:
+1. It accepts an optional run-time parameter that specifies a local directory 
+   from which to serve files.
+2. It accepts an optional integer URL parameter that will only send the last
+   specified number of lines.
+3. It will send a HTTP 1.1 keepalive header and will continually stream the 
+   file as it is being updated on the file system.
+
+Usage
+-----
+Starting:
+    $ python /path/to/logviewer.py 8080 /var/log/mylogs
+
+This will launch a Python process, listening on port 8080 that will serve a 
+directory listing of /var/log/mylogs on request. When someone clicks a file in
+that directory listing in a browser, logviewer.py will serve the entire file
+while keeping the connection open to append to the log, just like 'tail -f'. 
+
+Additionally, a HTTP request can include a "?n" parameter, where n is an integer
+that will display the last n number of lines of the file.  Example:
+
+http://1.2.3.4:8080/mylog.log?50
+
+This will send the last 50 lines of mylog.log and then continue to update it as
+it is being appended.
+
+
